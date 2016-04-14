@@ -1,5 +1,7 @@
 package com.dmk.limbikasdk.views;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -19,6 +21,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -145,7 +149,7 @@ public class LimbikaView extends View {
             int isCircleView = c.getInt(c.getColumnIndex("isCircleView"));
             int textSize = c.getInt(c.getColumnIndex("textSize"));
             int width = c.getInt(c.getColumnIndex("width"));
-            byte[] blob = c.getBlob(c.getColumnIndex("imageBitmap"));
+           String blob = c.getString(c.getColumnIndex("blob"));
 
             sleft = c.getInt(c.getColumnIndex("left"));
             sright = c.getInt(c.getColumnIndex("right"));
@@ -178,6 +182,10 @@ public class LimbikaView extends View {
 
             savedDrawable = drawable;
 
+            this.blob =blob;
+
+            if(blob!=null)
+                setImage(getSavedBitmap());
             if (image == -1)
                 setImage(drawable);
 
@@ -240,12 +248,15 @@ public class LimbikaView extends View {
 
         String sql;
         if (c.moveToFirst())
-            sql = "update viewState set x=" + x + ",y=" + y + ",rotation=" + rotation + ",isCircleView=" + (isCircleView ? 1 : 0) + ",circleColor=" + circleColor + ",userText='" + text + "',textColor=" + textColor + ",textSize=" + textSize + ",borderColor=" + borderColor + ",drawable=" + image + ",backgroundColor=1,width=" + canvasWidth + ",height=" + canvasHeight + ",left=" + left + ",right=" + right + ",top=" + top + ",bottom=" + bottom + ",imageBitmap='"+blob+"' where key='" + key + "'";
+            sql = "update viewState set x=" + x + ",y=" + y + ",rotation=" + rotation + ",isCircleView=" + (isCircleView ? 1 : 0) + ",circleColor=" + circleColor + ",userText='" + text + "',textColor=" + textColor + ",textSize=" + textSize + ",borderColor=" + borderColor + ",drawable=" + image + ",backgroundColor=1,width=" + canvasWidth + ",height=" + canvasHeight + ",left=" + left + ",right=" + right + ",top=" + top + ",bottom=" + bottom + ",blob='"+blob+"' where key='" + key + "'";
         else
             sql = "insert into viewState values(" + x + "," + y + "," + rotation + ",'" + key + "'," + (isCircleView ? 1 : 0) + "," + circleColor + ",'" + text + "'," + textColor + "," + textSize + "," + borderColor + ",1," + image + "," + canvasWidth + "," + canvasHeight + "," + left + "," + right + "," + top + "," + bottom + ",'"+blob+"'" +
                     ")";
 
         db.execSQL(sql);
+
+
+
     }
 
     public void setTextSize(int textSize) {
@@ -267,7 +278,7 @@ public class LimbikaView extends View {
     public void setImage(int res) {
         this.image = res;
     }
-    byte[] blob= null;
+    String blob= null;
     public void setImage(Bitmap bitmap) {
         this.imageBitmap = bitmap;
     }
@@ -296,6 +307,16 @@ public class LimbikaView extends View {
       //  bm.recycle();
         return resizedBitmap;
     }
+
+
+    public void saveBitmap(){
+        if(imageBitmap!=null)
+          saveBitmap(imageBitmap);
+        else
+           Log.e("Limbika-SDK","Bitmap image not saved");
+
+    }
+
 
     public Bitmap getBitmapImage() {
         Resources r = getResources();
@@ -350,9 +371,49 @@ public class LimbikaView extends View {
 
         bitmap = getResizedBitmap(bitmap, newWidth, newHeight);
 
-        blob = DbBitmapUtility.getBytes(bitmap);
 
-        canvas.drawBitmap(isCircleView ? getCircleBitmap(bitmap) : bitmap, xCenter, yCenter, paint);
+
+        Bitmap circle =getCircleBitmap(bitmap);
+
+        canvas.drawBitmap(isCircleView ? circle : bitmap, xCenter, yCenter, paint);
+
+
+
+    }
+
+
+    public Bitmap getSavedBitmap(){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return  BitmapFactory.decodeFile(blob, options);
+    }
+
+    private void saveBitmap(Bitmap bitmap ){
+        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/limbikasdk/";
+        File dir = new File(file_path);
+        if(!dir.exists())
+            dir.mkdirs();
+
+
+        File file = new File(dir, key + ".png");
+
+        FileOutputStream fOut;
+        try {
+
+
+            fOut = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+
+            blob = file_path+ key + ".png";
+
+            Log.d("Bitmapsave", "Bitmap  saved");
+        } catch (Exception e) {
+            Log.d("Bitmapsave", "Bitmap NOT saved "+e.toString());
+            e.printStackTrace();
+        }
 
 
     }
@@ -920,7 +981,7 @@ public class LimbikaView extends View {
         //  yCenter = ((top + colorballs.get(0).getWidthOfBall()) / 2 + (bottom + colorballs.get(2).getWidthOfBall() / 2)) / 2;
 
 
-        if (image != -1)
+        if (image != -1 || imageBitmap!=null)
             drawImage(canvas, image, imageBitmap, left + colorballs.get(0).getWidthOfBall() / 2, top + colorballs.get(0).getWidthOfBall() / 2);
 
 

@@ -37,7 +37,12 @@ public class ArrangeViewsActivity extends AppCompatActivity {
 
         LimbikaView imageBlock = new LimbikaView(getApplicationContext());
         imageBlock.setKey("img");
-        imageBlock.setImage(R.drawable.ic_cat);
+
+
+        Resources r = getResources();
+        Bitmap bitmap =  BitmapFactory.decodeResource(r, R.drawable.ic_cat);
+        imageBlock.setImage(bitmap);
+        imageBlock.saveBitmap();
         emptyBlock.onResume();//restore view
 
         parent.addView(imageBlock);

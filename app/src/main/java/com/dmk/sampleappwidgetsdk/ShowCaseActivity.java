@@ -1,5 +1,6 @@
 package com.dmk.sampleappwidgetsdk;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -53,9 +54,13 @@ public class ShowCaseActivity extends AppCompatActivity {
         limbikaView2.setEnabled(false);//disable view
         limbikaView2.onResume();
 
+
+        //to get view from database
+         Bitmap savedBitmap =   limbikaView.getSavedBitmap();
+
         addContentView(limbikaView2, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        // limbikaView.setEnabled(false);
+
 
 
     }
