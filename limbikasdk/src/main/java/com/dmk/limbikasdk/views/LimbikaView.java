@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import com.dmk.limbikasdk.R;
 import com.dmk.limbikasdk.db.Database;
+import com.dmk.limbikasdk.db.DbBitmapUtility;
 
 
 public class LimbikaView extends View {
@@ -124,6 +125,7 @@ public class LimbikaView extends View {
 
     int sleft, sright, stop, sbottom;
 
+    int savedDrawable = -1;
     /**
      * restores the view if it exists
      **/
@@ -143,6 +145,7 @@ public class LimbikaView extends View {
             int isCircleView = c.getInt(c.getColumnIndex("isCircleView"));
             int textSize = c.getInt(c.getColumnIndex("textSize"));
             int width = c.getInt(c.getColumnIndex("width"));
+            byte[] blob = c.getBlob(c.getColumnIndex("imageBitmap"));
 
             sleft = c.getInt(c.getColumnIndex("left"));
             sright = c.getInt(c.getColumnIndex("right"));
@@ -172,6 +175,8 @@ public class LimbikaView extends View {
             setTextSize(textSize);
             setBackgroundColor(backgroundColor);
             setCircleView(isCircleView == 1);
+
+            savedDrawable = drawable;
 
             if (image == -1)
                 setImage(drawable);
@@ -209,6 +214,8 @@ public class LimbikaView extends View {
     }
 
 
+
+
     /**
      * saves current view state and position to database
      ***/
@@ -229,11 +236,14 @@ public class LimbikaView extends View {
         int top = getTop();
         int bottom = getBottom();
 
+
+
         String sql;
         if (c.moveToFirst())
-            sql = "update viewState set x=" + x + ",y=" + y + ",rotation=" + rotation + ",isCircleView=" + (isCircleView ? 1 : 0) + ",circleColor=" + circleColor + ",userText='" + text + "',textColor=" + textColor + ",textSize=" + textSize + ",borderColor=" + borderColor + ",drawable=" + image + ",backgroundColor=1,width=" + canvasWidth + ",height=" + canvasHeight + ",left=" + left + ",right=" + right + ",top=" + top + ",bottom=" + bottom + " where key='" + key + "'";
+            sql = "update viewState set x=" + x + ",y=" + y + ",rotation=" + rotation + ",isCircleView=" + (isCircleView ? 1 : 0) + ",circleColor=" + circleColor + ",userText='" + text + "',textColor=" + textColor + ",textSize=" + textSize + ",borderColor=" + borderColor + ",drawable=" + image + ",backgroundColor=1,width=" + canvasWidth + ",height=" + canvasHeight + ",left=" + left + ",right=" + right + ",top=" + top + ",bottom=" + bottom + ",imageBitmap='"+blob+"' where key='" + key + "'";
         else
-            sql = "insert into viewState values(" + x + "," + y + "," + rotation + ",'" + key + "'," + (isCircleView ? 1 : 0) + "," + circleColor + ",'" + text + "'," + textColor + "," + textSize + "," + borderColor + ",1," + image + "," + canvasWidth + "," + canvasHeight + "," + left + "," + right + "," + top + "," + bottom + ")";
+            sql = "insert into viewState values(" + x + "," + y + "," + rotation + ",'" + key + "'," + (isCircleView ? 1 : 0) + "," + circleColor + ",'" + text + "'," + textColor + "," + textSize + "," + borderColor + ",1," + image + "," + canvasWidth + "," + canvasHeight + "," + left + "," + right + "," + top + "," + bottom + ",'"+blob+"'" +
+                    ")";
 
         db.execSQL(sql);
     }
@@ -257,7 +267,7 @@ public class LimbikaView extends View {
     public void setImage(int res) {
         this.image = res;
     }
-
+    byte[] blob= null;
     public void setImage(Bitmap bitmap) {
         this.imageBitmap = bitmap;
     }
@@ -293,6 +303,13 @@ public class LimbikaView extends View {
         return bitmap;
     }
 
+    public Bitmap getSavedBitmapImage() {
+
+        Resources r = getResources();
+        Bitmap bitmap = BitmapFactory.decodeResource(r, savedDrawable);
+        return bitmap;
+    }
+
     private Bitmap getCircleBitmap(Bitmap bitmap) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -325,11 +342,16 @@ public class LimbikaView extends View {
         Bitmap bitmap = drawableBitmap != null ? drawableBitmap : BitmapFactory.decodeResource(r, res);
         mBitmap = bitmap;
 
+        imageBitmap = bitmap;
+
         int newWidth = getWidth() - colorballs.get(0).getWidthOfBall();
         int newHeight = getHeight() - colorballs.get(0).getHeightOfBall();
 
 
         bitmap = getResizedBitmap(bitmap, newWidth, newHeight);
+
+        blob = DbBitmapUtility.getBytes(bitmap);
+
         canvas.drawBitmap(isCircleView ? getCircleBitmap(bitmap) : bitmap, xCenter, yCenter, paint);
 
 
