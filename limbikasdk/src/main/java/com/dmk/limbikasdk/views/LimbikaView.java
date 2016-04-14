@@ -283,7 +283,7 @@ public class LimbikaView extends View {
         // "RECREATE" THE NEW BITMAP
         Bitmap resizedBitmap = Bitmap.createBitmap(
                 bm, 0, 0, width < 0 ? 10 : width, height < 0 ? 10 : height, matrix, false);
-        bm.recycle();
+      //  bm.recycle();
         return resizedBitmap;
     }
 
@@ -311,7 +311,7 @@ public class LimbikaView extends View {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
-        bitmap.recycle();
+    //    bitmap.recycle();
 
         return output;
     }
@@ -945,9 +945,17 @@ public class LimbikaView extends View {
         //1 - text spacing add
         //true - include padding
         //
-        StaticLayout sl = new StaticLayout(text, tempTextPaint, canvasWidth >
-                canvasHeight ? ((canvasWidth / 2 ) < 0 ? 1 : (canvasWidth / 2 )) : ((canvasHeight / 2 ) < 0 ? 1 : (canvasHeight / 2 )),
-                Layout.Alignment.ALIGN_CENTER, 1, 1, false);
+        StaticLayout sl;
+        if(canvasWidth>canvasHeight) {
+             sl = new StaticLayout(text, tempTextPaint, canvasWidth >
+                    canvasHeight ? ((canvasWidth / 1) < 0 ? 1 : (canvasWidth / 1)) : ((canvasHeight / 1) < 0 ? 1 : (canvasHeight / 1)),
+                    Layout.Alignment.ALIGN_CENTER, 1, 1, false);
+        }else{
+             sl = new StaticLayout(text, tempTextPaint, canvasHeight >
+                    canvasWidth ? ((canvasWidth / 1) < 0 ? 1 : (canvasWidth / 1)) : ((canvasHeight / 1) < 0 ? 1 : (canvasHeight / 1)),
+                    Layout.Alignment.ALIGN_CENTER, 1, 1, false);
+        }
+
 
         canvas.save();
 
@@ -957,16 +965,16 @@ public class LimbikaView extends View {
         //text height and number of lines to move Y coordinate to center.
         float textHeight = getTextHeight(text, tempTextPaint);
         int numberOfTextLines = sl.getLineCount();
-        float textYCoordinate = bounds.exactCenterY() -
+        float textYCoordinate = cY -
                 ((numberOfTextLines * textHeight) / 2);
 
         //text will be drawn from left
-        float textXCoordinate = cX - 30;
+        float textXCoordinate = cX -30;
 
-        //if (isCircleView)
-        //      canvas.translate(textXCoordinate, textYCoordinate + 30);
-        //   else
-        canvas.translate(canvasHeight > canvasWidth ? cX - canvasWidth / 5 : cX - canvasHeight / 5, cY);
+      //  if (isCircleView)
+      ///  canvas.translate(cX, textYCoordinate );
+         //  else
+        canvas.translate(canvasHeight > canvasWidth ? cX - canvasWidth / 2 : cX - canvasWidth / 2, cY);
 
         //draws static layout on canvas
         sl.draw(canvas);
