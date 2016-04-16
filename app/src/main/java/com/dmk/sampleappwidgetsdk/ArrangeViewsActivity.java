@@ -30,8 +30,8 @@ public class ArrangeViewsActivity extends AppCompatActivity {
          parent = (FrameLayout)findViewById(R.id.parentFrame);
 
         LimbikaView emptyBlock = new LimbikaView(getApplicationContext());
-        emptyBlock.setKey("txt");
-        emptyBlock.setText("This is a blue whale");
+        emptyBlock.setKey("txt1");
+        emptyBlock.setText("This is a blue whale ,vrooooooooooooooooooooooooooooooooooooooooom , vrooooooooooooooooooooooooooooooooooooooooooooooooooooooom, vrooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooom");
         emptyBlock.onResume();//restore view
         parent.addView(emptyBlock);
 

@@ -925,7 +925,7 @@ public class LimbikaView extends View {
         int yCenter = ((top + colorballs.get(0).getWidthOfBall()) / 2 + (bottom + colorballs.get(2).getWidthOfBall() / 2)) / 2;
 
 
-        if (isCircleView && image == -1)
+        if (isCircleView && image == -1 && imageBitmap==null)
             if (canvasHeight > canvasWidth)
                 canvas.drawCircle(xCenter, yCenter, canvasWidth / 2, paint);
             else
@@ -1057,7 +1057,7 @@ public class LimbikaView extends View {
       //  if (isCircleView)
       ///  canvas.translate(cX, textYCoordinate );
          //  else
-        canvas.translate(canvasHeight > canvasWidth ? cX - canvasWidth / 2 : cX - canvasWidth / 2, cY);
+        canvas.translate(canvasHeight > canvasWidth ? cX - canvasWidth / 2 : cX - canvasWidth / 2,numberOfTextLines==1?cY:textYCoordinate);
 
         //draws static layout on canvas
         sl.draw(canvas);
