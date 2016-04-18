@@ -32,7 +32,8 @@ public class ArrangeViewsActivity extends AppCompatActivity {
         LimbikaView emptyBlock = new LimbikaView(getApplicationContext());
         emptyBlock.setKey("txt1");
         emptyBlock.setText("This is a blue whale ,vrooooooooooooooooooooooooooooooooooooooooom , vrooooooooooooooooooooooooooooooooooooooooooooooooooooooom, vrooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooom");
-        emptyBlock.onResume();//restore view
+       // emptyBlock.onResume();//restore view
+        emptyBlock.setEnabled(false);
         parent.addView(emptyBlock);
 
         LimbikaView imageBlock = new LimbikaView(getApplicationContext());

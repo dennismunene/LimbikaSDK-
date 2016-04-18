@@ -843,8 +843,8 @@ public class LimbikaView extends View {
         int left, top, right, bottom;
         left = sleft;
         top = stop;
-        right = getWidth() - colorballs.get(0).getWidthOfBall() + 5;
-        bottom = getHeight() - colorballs.get(0).getHeightOfBall() + 5;
+        right = getWidth() - (colorballs.get(0).getWidthOfBall() +25);
+        bottom = getHeight() - (colorballs.get(0).getHeightOfBall() + 25);
 
         gRight = right;
         gBottom = bottom;
