@@ -3,7 +3,6 @@ package com.dmk.limbikasdk.views;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -58,7 +57,6 @@ public class LimbikaView extends View {
     // variable to know what ball is being dragged
     private Paint paint;
     private Canvas canvas;
-    private int image = -1;
 
 
     private Bitmap imageBitmap = null;
@@ -86,6 +84,8 @@ public class LimbikaView extends View {
 
     private String text;
     private Typeface typeFace;
+    private int image = -1;
+
     private int textColor = -1;
     private int textSize = -1;
     private int circleColor = -1;
@@ -98,7 +98,6 @@ public class LimbikaView extends View {
         paint = new Paint();
         setFocusable(true); // necessary for getting the touch events
         canvas = new Canvas();
-        //  setLayoutParams(new RelativeLayout.LayoutParams(layout_width, layout_height));
         init(context);
     }
 
@@ -115,18 +114,30 @@ public class LimbikaView extends View {
         init(context);
     }
 
+
+    /**
+     * @param   circleColor
+     *             set the circleColor
+     * **/
     public void setCircleColor(int circleColor) {
         this.circleColor = circleColor;
     }
-
+    /**
+     * @param   borderColor
+     *             set the borderColor
+     * **/
     public void setBorderColor(int borderColor) {
         this.borderColor = borderColor;
     }
 
+    /**
+     * @param  key to uniquely identify this view in the database*/
     public void setKey(String key) {
         this.key = key;
     }
 
+
+    //get last view position from database and set these values
     int sleft, sright, stop, sbottom;
 
     int savedDrawable = -1;
@@ -259,35 +270,64 @@ public class LimbikaView extends View {
 
     }
 
+    /**
+     * @param   textSize
+     *             set the textSize
+     * **/
     public void setTextSize(int textSize) {
         this.textSize = textSize;
     }
-
+    /**
+     * @param   textColor
+     *             set the text color
+     * **/
     public void setTextColor(int textColor) {
         this.textColor = textColor;
     }
 
+    /**
+     * @param typeFace
+     *             set the font for the tezt
+     * **/
     public void setTypeFace(Typeface typeFace) {
         this.typeFace = typeFace;
     }
 
+    /**
+     * @param   text
+     *             set the text to be drawn
+     * **/
     public void setText(String text) {
         this.text = text;
     }
 
+    /***
+     * @param res
+     * set image from resource
+     * **/
     public void setImage(int res) {
         this.image = res;
     }
     String blob= null;
+    /***
+     * @param bitmap
+     * set image from bitmap
+     * **/
     public void setImage(Bitmap bitmap) {
         this.imageBitmap = bitmap;
     }
 
+    /***
+     * @param bol
+     * enable/ disbale circleView
+     * **/
     public void setCircleView(boolean bol) {
         this.isCircleView = bol;
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+    /**
+     * resize bitmap***/
+    private Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
 
 
         int width = bm.getWidth();
@@ -309,6 +349,8 @@ public class LimbikaView extends View {
     }
 
 
+    /***
+     * saves bitmap to external storage*/
     public void saveBitmap(){
         if(imageBitmap!=null)
           saveBitmap(imageBitmap);
@@ -324,6 +366,9 @@ public class LimbikaView extends View {
         return bitmap;
     }
 
+
+    /**
+     * @return  Bitmap as saved on external storage**/
     public Bitmap getSavedBitmapImage() {
 
         Resources r = getResources();
@@ -331,6 +376,9 @@ public class LimbikaView extends View {
         return bitmap;
     }
 
+
+    /**@param  bitmap to be circled
+     * @return  create circle bitmap**/
     private Bitmap getCircleBitmap(Bitmap bitmap) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -355,8 +403,9 @@ public class LimbikaView extends View {
     }
 
 
-    // Drawable d = context.getResources().getDrawable(res);
-    public void drawImage(Canvas canvas, int res, Bitmap drawableBitmap, int xCenter, int yCenter) {
+    /***
+     * draws image on the canvas**/
+    private void drawImage(Canvas canvas, int res, Bitmap drawableBitmap, int xCenter, int yCenter) {
 
 
         Resources r = getResources();
@@ -388,6 +437,10 @@ public class LimbikaView extends View {
         return  BitmapFactory.decodeFile(blob, options);
     }
 
+
+    /**
+     * @param bitmap to be saved
+     *  writes bitmap to external storage **/
     private void saveBitmap(Bitmap bitmap ){
         String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                 "/limbikasdk/";
@@ -439,6 +492,7 @@ public class LimbikaView extends View {
     }
 
 
+    /**check wether the view **/
     boolean shouldRotate = true;
 
     public void drag(MotionEvent event, View view) {
@@ -456,20 +510,16 @@ public class LimbikaView extends View {
                     singleTapListener.onSingleTap(this);
                 }
 
-                dX = view.getX() - event.getRawX();
-                dY = view.getY() - event.getRawY();
-                startMovePoint = new Point(X, Y);
-
 
                 //rotate button clicked
 
                 if (isEnabled())
                     if (balID == 0) {
-                        if (rotation == 360)
-                            rotation = -45;
+                        if (rotation == 360/*max rotation*/ )
+                            rotation = -45;//
 
                         //   if (shouldRotate) {
-                        rotation += 45;
+                        rotation += 45;//rotate by 45 degrees each time
                         setRotation(rotation);
                         // }
 
@@ -483,6 +533,10 @@ public class LimbikaView extends View {
                     //disable view
                     setVisibility(View.GONE);
                 }
+
+                dX = view.getX() - event.getRawX();
+                dY = view.getY() - event.getRawY();
+                startMovePoint = new Point(X, Y);
 
 
                 //change balls to selected state
@@ -648,8 +702,11 @@ public class LimbikaView extends View {
 
                         float newX = event.getRawX() + dX;
                         float newY = event.getRawY() + dY;
-                        if ((newX <= canvasWidth / 2 || newX >= width - canvasWidth - 50) ||
-                                (newY <= canvasHeight / 2 || newY >= height - canvasHeight - 50)) {//don't move oustide
+
+                        int PADDING = 50;// padding from edge of screen
+
+                        if ((newX <= canvasWidth / 2 || newX >= width - canvasWidth - PADDING) ||
+                                (newY <= canvasHeight / 2 || newY >= height - canvasHeight - PADDING)) {//don't move oustide
                             shouldRotate = false;
 
                         }
@@ -843,8 +900,8 @@ public class LimbikaView extends View {
         int left, top, right, bottom;
         left = sleft;
         top = stop;
-        right = getWidth() - (colorballs.get(0).getWidthOfBall() +25);
-        bottom = getHeight() - (colorballs.get(0).getHeightOfBall() + 25);
+        right = getWidth() - (colorballs.get(0).getWidthOfBall() );
+        bottom = getHeight() - (colorballs.get(0).getHeightOfBall() );
 
         gRight = right;
         gBottom = bottom;
@@ -933,18 +990,16 @@ public class LimbikaView extends View {
 
         if (!TextUtils.isEmpty(text))
             if (isCircleView)
-                drawDigit(canvas, canvasHeight > canvasWidth ? canvasWidth / 16 : canvasHeight / 16
-                        , xCenter, yCenter, Color.BLACK, text);
+                drawDigit(canvas,xCenter, yCenter, Color.BLACK, text);
             else
-                drawDigit(canvas, canvasHeight > canvasWidth ? canvasWidth / 16 : canvasHeight / 16
-                        , xCenter, yCenter, Color.BLACK, text);
+                drawDigit(canvas, xCenter, yCenter, Color.BLACK, text);
 
 
         //draw the corners
         BitmapDrawable bitmap = new BitmapDrawable();
         // draw the balls on the canvas
         paint.setColor(Color.BLUE);
-        paint.setTextSize(18);
+        paint.setTextSize(18);// 18 is default text size
         paint.setStrokeWidth(0);
 
 
@@ -991,7 +1046,7 @@ public class LimbikaView extends View {
         gBottom = bottom;
     }
 
-    private void drawDigit(Canvas canvas, int textSize, float cX, float cY, int color, String text) {
+    private void drawDigit(Canvas canvas, float cX, float cY, int color, String text) {
 
         Rect bounds = new Rect();
         bounds.set(gLeft, gTop, gRight, gBottom);
@@ -1057,7 +1112,7 @@ public class LimbikaView extends View {
       //  if (isCircleView)
       ///  canvas.translate(cX, textYCoordinate );
          //  else
-        canvas.translate(canvasHeight > canvasWidth ? cX - canvasWidth / 2 : cX - canvasWidth / 2,numberOfTextLines==1?cY:textYCoordinate);
+        canvas.translate(canvasHeight > canvasWidth ? cX - canvasWidth / 2 : cX - canvasWidth / 2,textYCoordinate);
 
         //draws static layout on canvas
         sl.draw(canvas);

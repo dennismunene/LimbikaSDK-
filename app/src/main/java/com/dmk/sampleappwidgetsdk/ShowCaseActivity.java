@@ -34,7 +34,9 @@ public class ShowCaseActivity extends AppCompatActivity {
 
         limbikaView =new LimbikaView(this);
         limbikaView.setKey("txt");
-        limbikaView.setEnabled(false);//disable view
+        limbikaView.setText("This text should be in the middle");
+        limbikaView.setTextSize(30);
+        limbikaView.setEnabled(true);//disable view
         limbikaView.onResume();
 
         addContentView(limbikaView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

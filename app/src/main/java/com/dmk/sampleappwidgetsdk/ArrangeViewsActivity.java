@@ -31,9 +31,11 @@ public class ArrangeViewsActivity extends AppCompatActivity {
 
         LimbikaView emptyBlock = new LimbikaView(getApplicationContext());
         emptyBlock.setKey("txt1");
-        emptyBlock.setText("This is a blue whale ,vrooooooooooooooooooooooooooooooooooooooooom , vrooooooooooooooooooooooooooooooooooooooooooooooooooooooom, vrooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooom");
+       // emptyBlock.setText("This is a blue whale ,vrooooooooooooooooooooooooooooooooooooooooom  vrooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooom");
        // emptyBlock.onResume();//restore view
-        emptyBlock.setEnabled(false);
+        emptyBlock.setText("This text should be in the middle");
+        emptyBlock.setTextSize(40);
+        emptyBlock.setEnabled(true);
         parent.addView(emptyBlock);
 
         LimbikaView imageBlock = new LimbikaView(getApplicationContext());
