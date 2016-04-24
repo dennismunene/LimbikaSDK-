@@ -511,22 +511,7 @@ public class LimbikaView extends View {
                 }
 
 
-                //rotate button clicked
 
-                if (isEnabled())
-                    if (balID == 0) {
-                        if (rotation == 360/*max rotation*/ )
-                            rotation = -45;//
-
-                        //   if (shouldRotate) {
-                        rotation += 45;//rotate by 45 degrees each time
-                        setRotation(rotation);
-                        // }
-
-                        if (rotationListener != null) {
-                            rotationListener.onRotate(rotation);
-                        }
-                    }
 
 
                 if (balID == 3) {
@@ -774,6 +759,23 @@ public class LimbikaView extends View {
                 break;
 
             case MotionEvent.ACTION_UP:
+
+                //rotate button clicked
+
+                if (isEnabled())
+                    if (balID == 0) {
+                        if (rotation == 360/*max rotation*/ )
+                            rotation = -45;//
+
+                        //   if (shouldRotate) {
+                        rotation += 45;//rotate by 45 degrees each time
+                        setRotation(rotation);
+                        // }
+
+                        if (rotationListener != null) {
+                            rotationListener.onRotate(rotation);
+                        }
+                    }
 
                 saveViewState();
                 // touch drop - just do things here after dropping
