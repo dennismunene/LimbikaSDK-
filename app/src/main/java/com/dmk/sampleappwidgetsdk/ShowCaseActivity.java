@@ -33,8 +33,8 @@ public class ShowCaseActivity extends AppCompatActivity {
 
 
         limbikaView =new LimbikaView(this);
-        limbikaView.setKey("txt");
-        limbikaView.setText("This text should be in the middle");
+        limbikaView.setKey("blocktex");
+        limbikaView.setText("Bangladesh officially the People's Republic of Bangladesh, is a sovereign country in South Asia. It forms part of the historical and cultural region of Bengal in the Indian subcontinent. Located at the apex of the Bay of Bengal, Bangladesh is bordered by India and Myanmar and is separated from Nepal and Bhutan by the narrow Siliguri Corridor.");
         limbikaView.setTextSize(30);
         limbikaView.setEnabled(true);//disable view
         limbikaView.onResume();

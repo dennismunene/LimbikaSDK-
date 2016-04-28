@@ -30,10 +30,11 @@ public class ArrangeViewsActivity extends AppCompatActivity {
          parent = (FrameLayout)findViewById(R.id.parentFrame);
 
         LimbikaView emptyBlock = new LimbikaView(getApplicationContext());
-        emptyBlock.setKey("txt1");
+        emptyBlock.setKey("txt81");
        // emptyBlock.setText("This is a blue whale ,vrooooooooooooooooooooooooooooooooooooooooom  vrooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooom");
        // emptyBlock.onResume();//restore view
-        emptyBlock.setText("This text should be in the middle");
+        emptyBlock.setText("Bangladesh officially the People's Republic of Bangladesh, is a sovereign country in South Asia. It forms part of the historical and cultural region of Bengal in the Indian subcontinent. Located at the apex of the Bay of Bengal, Bangladesh is bordered by India and Myanmar and is separated from Nepal and Bhutan by the narrow Siliguri Corridor.");
+
         emptyBlock.setTextSize(40);
         emptyBlock.setEnabled(true);
         parent.addView(emptyBlock);

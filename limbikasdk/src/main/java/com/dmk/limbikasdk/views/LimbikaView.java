@@ -2,6 +2,8 @@ package com.dmk.limbikasdk.views;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import android.content.Context;
 import android.content.res.Resources;
@@ -184,7 +186,7 @@ public class LimbikaView extends View {
             setBorderColor(borderColor);
 
             if (!userText.equals("null"))
-                setText(userText);
+                setText(URLDecoder.decode(userText));
 
             setTextColor(textColor);
             setTextSize(textSize);
@@ -259,9 +261,9 @@ public class LimbikaView extends View {
 
         String sql;
         if (c.moveToFirst())
-            sql = "update viewState set x=" + x + ",y=" + y + ",rotation=" + rotation + ",isCircleView=" + (isCircleView ? 1 : 0) + ",circleColor=" + circleColor + ",userText='" + text + "',textColor=" + textColor + ",textSize=" + textSize + ",borderColor=" + borderColor + ",drawable=" + image + ",backgroundColor=1,width=" + canvasWidth + ",height=" + canvasHeight + ",left=" + left + ",right=" + right + ",top=" + top + ",bottom=" + bottom + ",blob='"+blob+"' where key='" + key + "'";
+            sql = "update viewState set x=" + x + ",y=" + y + ",rotation=" + rotation + ",isCircleView=" + (isCircleView ? 1 : 0) + ",circleColor=" + circleColor + ",userText='" +( text == null?"":URLEncoder.encode(text)) + "',textColor=" + textColor + ",textSize=" + textSize + ",borderColor=" + borderColor + ",drawable=" + image + ",backgroundColor=1,width=" + canvasWidth + ",height=" + canvasHeight + ",left=" + left + ",right=" + right + ",top=" + top + ",bottom=" + bottom + ",blob='"+blob+"' where key='" + key + "'";
         else
-            sql = "insert into viewState values(" + x + "," + y + "," + rotation + ",'" + key + "'," + (isCircleView ? 1 : 0) + "," + circleColor + ",'" + text + "'," + textColor + "," + textSize + "," + borderColor + ",1," + image + "," + canvasWidth + "," + canvasHeight + "," + left + "," + right + "," + top + "," + bottom + ",'"+blob+"'" +
+            sql = "insert into viewState values(" + x + "," + y + "," + rotation + ",'" + key + "'," + (isCircleView ? 1 : 0) + "," + circleColor + ",'" + ( text == null?"":URLEncoder.encode(text)) + "'," + textColor + "," + textSize + "," + borderColor + ",1," + image + "," + canvasWidth + "," + canvasHeight + "," + left + "," + right + "," + top + "," + bottom + ",'"+blob+"'" +
                     ")";
 
         db.execSQL(sql);
